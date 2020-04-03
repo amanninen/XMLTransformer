@@ -45,6 +45,7 @@ public class XmlTransform {
 				EndElement endElement = event.asEndElement();
 				if (endElement.getName().getLocalPart() == ("Record")) {
 					count++;
+					out.write(":");
 					out.newLine();
 				}
 			}
