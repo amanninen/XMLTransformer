@@ -19,15 +19,12 @@ public class XmlTransform {
 
 	public static void RunTransformation() throws XMLStreamException, IOException {
 
-		String file ="test.xml";
-		// First create a new XMLInputFactory
+		String file ="export.xml";
 		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
-		// Setup a new eventReader
 		InputStream in = new FileInputStream(file);
 		XMLEventReader eventReader = inputFactory.createXMLEventReader(in);
-		// Read the XML document
 
-		BufferedWriter out = new BufferedWriter(new FileWriter("file.txt"));
+		BufferedWriter out = new BufferedWriter(new FileWriter("output.txt"));
 
 		int count = 0;
 		while (eventReader.hasNext()) {
@@ -35,33 +32,19 @@ public class XmlTransform {
 
 			if (event.isStartElement()) {
 				StartElement startElement = event.asStartElement();
-				// If we have a item element we create a new item
-				if (startElement.getName().getLocalPart() == ("entry")) {				
-					// We read the attributes from this tag and add the date
-					// attribute to our object
+				if (startElement.getName().getLocalPart() == ("Record")) {				
 					Iterator<Attribute> attributes = startElement
 							.getAttributes();
 					while (attributes.hasNext()) {
 						Attribute attribute = attributes.next();
-						if (attribute.getName().toString().equals("id")) {
-							//item.setDate(attribute.getValue());
-							//System.out.println(attribute.getValue());
-							out.write("test "+attribute.getValue() + ",");
-							count++;
-						}
-						if (attribute.getName().toString().equals("attr1")) {
-							//item.setDate(attribute.getValue());
-							//System.out.println(attribute.getValue());
-							out.write(attribute.getValue());
-						}
+						out.write(attribute.getValue() + ",");
 					}
 				}
 			}
-			// If we reach the end of an item element we add it to the list
 			if (event.isEndElement()) {
 				EndElement endElement = event.asEndElement();
-				if (endElement.getName().getLocalPart() == ("entry")) {
-					//items.add(item);
+				if (endElement.getName().getLocalPart() == ("Record")) {
+					count++;
 					out.newLine();
 				}
 			}
